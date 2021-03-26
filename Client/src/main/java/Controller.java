@@ -25,6 +25,7 @@ public class Controller implements Initializable {
 
     private boolean authenticated;
     private String nickname;
+    private String login;
 
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
@@ -36,6 +37,11 @@ public class Controller implements Initializable {
         clientsList.setManaged(authenticated);
         if (!authenticated) {
             nickname = "";
+            login="";
+        }
+        else{
+            String history =HistoryMaker.lastHistory(login);
+            textArea.appendText(history);
         }
     }
 
@@ -54,6 +60,7 @@ public class Controller implements Initializable {
     }
 
     public void sendAuth() {
+        login=loginField.getText();
         Network.sendAuth(loginField.getText(), passField.getText());
         loginField.clear();
         passField.clear();
@@ -96,8 +103,8 @@ public class Controller implements Initializable {
                     });
                 }
             } else {
-                textArea.appendText(msg + "\n");
-
+                textArea.appendText(msg + System.lineSeparator());
+                HistoryMaker.sendHistory(login,msg +  System.lineSeparator());
             }
         });
     }
